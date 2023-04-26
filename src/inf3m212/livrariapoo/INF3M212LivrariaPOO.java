@@ -23,6 +23,7 @@ import services.EditoraServicos;
 import services.LivroServicos;
 import services.ServicosFactory;
 import services.VendaLivroServicos;
+import view.Menu;
 
 /**
  *
@@ -163,6 +164,9 @@ public class INF3M212LivrariaPOO {
      */
     public static void main(String[] args) throws SQLException {
         // TODO code application logic here
+        Menu jfMenu = new Menu();
+        jfMenu.setVisible(true);
+        /*
         cadCliente.mockClientes();
         cadEditora.mockEditoras();
         cadLivro.mockLivros();
@@ -243,8 +247,8 @@ public class INF3M212LivrariaPOO {
                     break;
             }
         } while (opM != 0);//fim Sistema
-
-    }
+*/
+    }//fim da main
 
     private static void listarClientes() {
         ClienteServicos clienteS = ServicosFactory.getClienteServicos();

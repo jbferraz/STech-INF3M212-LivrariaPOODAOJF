@@ -6,6 +6,10 @@
 package view;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Cliente;
+import services.ClienteServicos;
+import services.ServicosFactory;
 import util.Validadores;
 
 /**
@@ -19,6 +23,45 @@ public class jfCliente extends javax.swing.JFrame {
      */
     public jfCliente() {
         initComponents();
+        addRowToTable();
+        jbDeletar.setVisible(false);
+        this.setLocationRelativeTo(null);
+    }
+
+    public boolean validaInputs() {
+        if (jtfNome.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Preencher nome!");
+            jtfNome.requestFocus();
+            return false;
+        } else if (jtfCPF.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Preencher CPF!");
+            jtfCPF.requestFocus();
+            return false;
+        } else if (jtfEndereco.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Preencher endereço!");
+            jtfEndereco.requestFocus();
+            return false;
+        } else if (jftfTelefone.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Preencher telefone!");
+            jftfTelefone.requestFocus();
+            return false;
+        }
+        return true;
+    }//fim validaInputs
+
+    public void addRowToTable() {
+        DefaultTableModel model = (DefaultTableModel) jtClientes.getModel();
+        model.getDataVector().removeAllElements();//remove todas as linhas
+        model.fireTableDataChanged();
+        Object rowData[] = new Object[4];
+        ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+        for (Cliente c : clienteS.getClientes()) {
+            rowData[0] = c.getCpf();
+            rowData[1] = c.getNomeCliente();
+            rowData[2] = c.getTelefone();
+            rowData[3] = c.getEndereco();
+            model.addRow(rowData);
+        }
     }
 
     /**
@@ -48,6 +91,7 @@ public class jfCliente extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtClientes = new javax.swing.JTable();
+        jbDeletar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gerência Cliente");
@@ -59,13 +103,13 @@ public class jfCliente extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Gerência Cliente");
 
-        jLabel2.setText("Nome:");
+        jLabel2.setText("* Nome:");
 
-        jLabel3.setText("CPF:");
+        jLabel3.setText("* CPF:");
 
-        jLabel4.setText("Endereço:");
+        jLabel4.setText("* Endereço:");
 
-        jLabel5.setText("Telefone:");
+        jLabel5.setText("* Telefone:");
 
         jtfEndereco.setToolTipText("Endereço completo.");
 
@@ -95,8 +139,15 @@ public class jfCliente extends javax.swing.JFrame {
         }
         jftfTelefone.setToolTipText("Informe somente números.");
 
-        jbSalvar.setText("Salva");
+        jbSalvar.setMnemonic('S');
+        jbSalvar.setText("Salvar");
+        jbSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSalvarActionPerformed(evt);
+            }
+        });
 
+        jbFechar.setMnemonic('F');
         jbFechar.setText("Fechar");
         jbFechar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,9 +155,16 @@ public class jfCliente extends javax.swing.JFrame {
             }
         });
 
+        jbEditar.setMnemonic('E');
         jbEditar.setText("Editar");
         jbEditar.setEnabled(false);
+        jbEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEditarActionPerformed(evt);
+            }
+        });
 
+        jbLimpar.setMnemonic('L');
         jbLimpar.setText("Limpar");
         jbLimpar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,19 +202,29 @@ public class jfCliente extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtClientes);
 
+        jbDeletar.setMnemonic('D');
+        jbDeletar.setText("Deletar");
+        jbDeletar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbDeletarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jbSalvar)
+                .addComponent(jbDeletar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jbLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbSalvar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jbEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jbFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jSeparator1)
@@ -174,7 +242,7 @@ public class jfCliente extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jftfTelefone, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                        .addComponent(jftfTelefone))
                     .addComponent(jtfNome))
                 .addGap(10, 10, 10))
             .addComponent(jSeparator2)
@@ -208,7 +276,8 @@ public class jfCliente extends javax.swing.JFrame {
                     .addComponent(jbSalvar)
                     .addComponent(jbFechar)
                     .addComponent(jbEditar)
-                    .addComponent(jbLimpar))
+                    .addComponent(jbLimpar)
+                    .addComponent(jbDeletar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -244,10 +313,12 @@ public class jfCliente extends javax.swing.JFrame {
 
     private void jtfCPFFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfCPFFocusLost
         // TODO add your handling code here:
-        if (!Validadores.isCPF(jtfCPF.getText())) {
-            JOptionPane.showMessageDialog(this, "CPF inválido.",
-                    "Erro CPF", JOptionPane.ERROR_MESSAGE);
-            jtfCPF.requestFocus();
+        if (!jtfCPF.getText().equals("")) {
+            if (!Validadores.isCPF(jtfCPF.getText())) {
+                JOptionPane.showMessageDialog(this, "CPF inválido.",
+                        "Erro CPF", JOptionPane.ERROR_MESSAGE);
+                jtfCPF.requestFocus();
+            }
         }
     }//GEN-LAST:event_jtfCPFFocusLost
 
@@ -266,20 +337,103 @@ public class jfCliente extends javax.swing.JFrame {
 
     private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimparActionPerformed
         // TODO add your handling code here:
+        if (jbLimpar.getText().equals("Limpar")) {
+            limparCampos();
+        } else {
+            limparCampos();
+            jbLimpar.setText("Limpar");
+            jbSalvar.setText("Salvar");
+            jbEditar.setEnabled(false);
+            jtfCPF.setEnabled(true);
+            jbDeletar.setVisible(false);
+        }
+    }//GEN-LAST:event_jbLimparActionPerformed
+
+    public void limparCampos() {
         jtfCPF.setText("");
         jtfEndereco.setText("");
         jtfNome.setText("");
         jftfTelefone.setText("");
         jtfNome.requestFocus();
-    }//GEN-LAST:event_jbLimparActionPerformed
+    }
 
     private void jtClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtClientesMouseClicked
         // TODO add your handling code here:
         jbEditar.setEnabled(true);
-        jbSalvar.setText("Confirmar");
-        jbLimpar.setEnabled(false);
-        jtfCPF.setEnabled(false);
+        jbDeletar.setVisible(true);
     }//GEN-LAST:event_jtClientesMouseClicked
+
+    private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
+        // TODO add your handling code here:
+        if (validaInputs()) {
+            //pegar dados da tela para salvar
+            int idCliente = 0;
+            String nomeCliente = jtfNome.getText().toUpperCase();
+            String cpf = jtfCPF.getText();
+            String cnpj = null;
+            String endereco = jtfEndereco.getText().toUpperCase();
+            String telefone = jftfTelefone.getText();
+            ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+            
+            Cliente c = new Cliente(idCliente, nomeCliente, cpf, cnpj, endereco, telefone);
+            if (jbSalvar.getText().equals("Salvar")) {
+                clienteS.cadCliente(c);
+            }else{
+                clienteS.atualizarCliente(c);
+                jbLimpar.doClick();
+            }
+            
+            limparCampos();
+            addRowToTable();
+        }
+    }//GEN-LAST:event_jbSalvarActionPerformed
+
+    private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
+        // TODO add your handling code here:
+        jbSalvar.setText("Confirmar");
+        jtfCPF.setEnabled(false);
+        jbLimpar.setText("Cancelar");
+        jbDeletar.setVisible(false);
+        
+        //pegando dados da tabela e add em variaveis locais
+        int linha;
+        linha = jtClientes.getSelectedRow();
+        String cpf = (String) jtClientes.getValueAt(linha, 0);
+        String nome = (String) jtClientes.getValueAt(linha, 1);
+        String telefone = (String) jtClientes.getValueAt(linha, 2);
+        String endereco = (String) jtClientes.getValueAt(linha, 3);
+        //carregar dados no form
+        jtfCPF.setText(cpf);
+        jtfNome.setText(nome);
+        jtfEndereco.setText(endereco);
+        jftfTelefone.setText(telefone);
+        jtfNome.requestFocus();        
+    }//GEN-LAST:event_jbEditarActionPerformed
+
+    private void jbDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDeletarActionPerformed
+        // TODO add your handling code here:
+        int linha;
+        String cpf;
+        linha = jtClientes.getSelectedRow();
+        cpf = (String) jtClientes.getValueAt(linha, 0);
+        ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+        Object[] resp = {"Sim", "Não"};
+        int resposta = JOptionPane.showOptionDialog(this, 
+                "Deseja realmente deletar este CPF?", "Deletar", 
+                JOptionPane.DEFAULT_OPTION, 
+                JOptionPane.WARNING_MESSAGE,
+                null, resp, resp[0]);
+        if (resposta == 0) {
+            clienteS.deletarCliente(cpf);
+            addRowToTable();
+            JOptionPane.showMessageDialog(this, 
+                    "Cliente deletado com sucesso!");
+        }else{
+            JOptionPane.showMessageDialog(this, 
+                    "ok, entendo sua descisão!");
+        }
+        jbDeletar.setVisible(false);
+    }//GEN-LAST:event_jbDeletarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -326,6 +480,7 @@ public class jfCliente extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JButton jbDeletar;
     private javax.swing.JButton jbEditar;
     private javax.swing.JButton jbFechar;
     private javax.swing.JButton jbLimpar;
