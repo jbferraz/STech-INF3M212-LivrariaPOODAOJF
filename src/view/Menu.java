@@ -137,7 +137,8 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jmiClienteActionPerformed
 
     private void jmiLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiLivroActionPerformed
-        JOptionPane.showMessageDialog(this, "Cadastrar Livro!");
+        jfLivro janelaLivro = new jfLivro();
+        janelaLivro.setVisible(true);
     }//GEN-LAST:event_jmiLivroActionPerformed
 
     /**

@@ -97,11 +97,15 @@ public class LivroDAO {
     public void atualizarLivroDAO(Livro livroVO){
         try {
             Connection con = Conexao.getConexao();
-            String sql = "update livros set estoque = ?, preco = ? where isbn = ?";
+            String sql = "update livros set estoque = ?, preco = ?, autor = ?,"
+                    + " assunto = ?, titulo = ? where isbn = ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setInt(1, livroVO.getEstoque());
             pst.setFloat(2, livroVO.getPreco());
-            pst.setString(3, livroVO.getIsbn());
+            pst.setString(3, livroVO.getAutor());
+            pst.setString(4, livroVO.getAssunto());
+            pst.setString(5, livroVO.getTitulo());
+            pst.setString(6, livroVO.getIsbn());
             pst.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Erro ao atualizar livro.\n" + e.getMessage());
