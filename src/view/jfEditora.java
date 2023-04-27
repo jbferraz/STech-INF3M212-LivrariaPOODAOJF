@@ -8,7 +8,8 @@ package view;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Cliente;
-import services.ClienteServicos;
+import model.Editora;
+import services.EditoraServicos;
 import services.ServicosFactory;
 import util.Validadores;
 
@@ -16,12 +17,12 @@ import util.Validadores;
  *
  * @author jbferraz
  */
-public class jfCliente extends javax.swing.JFrame {
+public class jfEditora extends javax.swing.JFrame {
 
     /**
-     * Creates new form jfCliente
+     * Creates new form jfEditora
      */
-    public jfCliente() {
+    public jfEditora() {
         initComponents();
         addRowToTable();
         jbDeletar.setVisible(false);
@@ -33,9 +34,9 @@ public class jfCliente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Preencher nome!");
             jtfNome.requestFocus();
             return false;
-        } else if (jtfCPF.getText().equals("")) {
+        } else if (jtfCNPJ.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Preencher CPF!");
-            jtfCPF.requestFocus();
+            jtfCNPJ.requestFocus();
             return false;
         } else if (jtfEndereco.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Preencher endereço!");
@@ -45,21 +46,25 @@ public class jfCliente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Preencher telefone!");
             jftfTelefone.requestFocus();
             return false;
+        } else if (jtfGerente.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Preencher gerente!");
+            jtfGerente.requestFocus();
+            return false;
         }
         return true;
     }//fim validaInputs
 
     public void addRowToTable() {
-        DefaultTableModel model = (DefaultTableModel) jtClientes.getModel();
+        DefaultTableModel model = (DefaultTableModel) jtEditoras.getModel();
         model.getDataVector().removeAllElements();//remove todas as linhas
         model.fireTableDataChanged();
         Object rowData[] = new Object[4];
-        ClienteServicos clienteS = ServicosFactory.getClienteServicos();
-        for (Cliente c : clienteS.getClientes()) {
-            rowData[0] = c.getCpf();
-            rowData[1] = c.getNomeCliente();
-            rowData[2] = c.getTelefone();
-            rowData[3] = c.getEndereco();
+        EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
+        for (Editora e : editoraS.getEditoras()) {
+            rowData[0] = e.getCnpj();
+            rowData[1] = e.getNmEditora();
+            rowData[2] = e.getTelefone();
+            rowData[3] = e.getGerente();
             model.addRow(rowData);
         }
     }
@@ -81,7 +86,7 @@ public class jfCliente extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jtfEndereco = new javax.swing.JTextField();
-        jtfCPF = new javax.swing.JTextField();
+        jtfCNPJ = new javax.swing.JTextField();
         jtfNome = new javax.swing.JTextField();
         jftfTelefone = new javax.swing.JFormattedTextField();
         jbSalvar = new javax.swing.JButton();
@@ -90,8 +95,10 @@ public class jfCliente extends javax.swing.JFrame {
         jbLimpar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jtClientes = new javax.swing.JTable();
+        jtEditoras = new javax.swing.JTable();
         jbDeletar = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jtfGerente = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gerência Cliente");
@@ -101,11 +108,11 @@ public class jfCliente extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 102, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Gerência Cliente");
+        jLabel1.setText("Gerência Editora");
 
-        jLabel2.setText("* Nome:");
+        jLabel2.setText("* Editora:");
 
-        jLabel3.setText("* CPF:");
+        jLabel3.setText("* CNPJ:");
 
         jLabel4.setText("* Endereço:");
 
@@ -113,15 +120,15 @@ public class jfCliente extends javax.swing.JFrame {
 
         jtfEndereco.setToolTipText("Endereço completo.");
 
-        jtfCPF.setToolTipText("Informe somente números.");
-        jtfCPF.addFocusListener(new java.awt.event.FocusAdapter() {
+        jtfCNPJ.setToolTipText("Informe somente números.");
+        jtfCNPJ.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jtfCPFFocusLost(evt);
+                jtfCNPJFocusLost(evt);
             }
         });
-        jtfCPF.addKeyListener(new java.awt.event.KeyAdapter() {
+        jtfCNPJ.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jtfCPFKeyTyped(evt);
+                jtfCNPJKeyTyped(evt);
             }
         });
 
@@ -172,12 +179,12 @@ public class jfCliente extends javax.swing.JFrame {
             }
         });
 
-        jtClientes.setModel(new javax.swing.table.DefaultTableModel(
+        jtEditoras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null}
             },
             new String [] {
-                "CPF", "Nome", "Telefone", "Endereço"
+                "CNPJ", "Nome", "Telefone", "Gerente"
             }
         ) {
             Class[] types = new Class [] {
@@ -195,18 +202,26 @@ public class jfCliente extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jtClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+        jtEditoras.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jtClientesMouseClicked(evt);
+                jtEditorasMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jtClientes);
+        jScrollPane1.setViewportView(jtEditoras);
 
         jbDeletar.setMnemonic('D');
         jbDeletar.setText("Deletar");
         jbDeletar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbDeletarActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("* Gerente:");
+
+        jtfGerente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfGerenteKeyTyped(evt);
             }
         });
 
@@ -236,19 +251,25 @@ public class jfCliente extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtfEndereco)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jtfCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtfCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jftfTelefone))
-                    .addComponent(jtfNome))
+                    .addComponent(jtfNome)
+                    .addComponent(jtfEndereco, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(10, 10, 10))
             .addComponent(jSeparator2)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6)
+                .addGap(18, 18, 18)
+                .addComponent(jtfGerente, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -264,7 +285,7 @@ public class jfCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jtfCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtfCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(jftfTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -272,6 +293,10 @@ public class jfCliente extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jtfEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jtfGerente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbSalvar)
                     .addComponent(jbFechar)
@@ -281,8 +306,8 @@ public class jfCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(202, 202, 202))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(191, 191, 191))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -293,34 +318,34 @@ public class jfCliente extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jtfCPFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfCPFKeyTyped
+    private void jtfCNPJKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfCNPJKeyTyped
         // TODO add your handling code here:
         String number = "0123456789";
-        if (jtfCPF.getText().length() < 11) {
+        if (jtfCNPJ.getText().length() < 14) {
             if (!number.contains(evt.getKeyChar() + "")) {
                 evt.consume();
             }
         } else {
             evt.consume();
         }
-    }//GEN-LAST:event_jtfCPFKeyTyped
+    }//GEN-LAST:event_jtfCNPJKeyTyped
 
-    private void jtfCPFFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfCPFFocusLost
+    private void jtfCNPJFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfCNPJFocusLost
         // TODO add your handling code here:
-        if (!jtfCPF.getText().equals("")) {
-            if (!Validadores.isCPF(jtfCPF.getText())) {
-                JOptionPane.showMessageDialog(this, "CPF inválido.",
-                        "Erro CPF", JOptionPane.ERROR_MESSAGE);
-                jtfCPF.requestFocus();
+        if (!jtfCNPJ.getText().equals("")) {
+            if (!Validadores.isCNPJ(jtfCNPJ.getText())) {
+                JOptionPane.showMessageDialog(this, "CNPJ inválido.",
+                        "Erro CNPJ", JOptionPane.ERROR_MESSAGE);
+                jtfCNPJ.requestFocus();
             }
         }
-    }//GEN-LAST:event_jtfCPFFocusLost
+    }//GEN-LAST:event_jtfCNPJFocusLost
 
     private void jtfNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfNomeKeyTyped
         // TODO add your handling code here:
@@ -349,23 +374,24 @@ public class jfCliente extends javax.swing.JFrame {
         jbLimpar.setText("Limpar");
         jbSalvar.setText("Salvar");
         jbEditar.setEnabled(false);
-        jtfCPF.setEnabled(true);
+        jtfCNPJ.setEnabled(true);
         jbDeletar.setVisible(false);
     }
-
+    
     public void limparCampos() {
-        jtfCPF.setText("");
+        jtfCNPJ.setText("");
         jtfEndereco.setText("");
         jtfNome.setText("");
         jftfTelefone.setText("");
+        jtfGerente.setText("");
         jtfNome.requestFocus();
     }
 
-    private void jtClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtClientesMouseClicked
+    private void jtEditorasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtEditorasMouseClicked
         // TODO add your handling code here:
         jbEditar.setEnabled(true);
         jbDeletar.setVisible(true);
-    }//GEN-LAST:event_jtClientesMouseClicked
+    }//GEN-LAST:event_jtEditorasMouseClicked
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
         // TODO add your handling code here:
@@ -373,20 +399,20 @@ public class jfCliente extends javax.swing.JFrame {
             //pegar dados da tela para salvar
             int idCliente = 0;
             String nomeCliente = jtfNome.getText().toUpperCase();
-            String cpf = jtfCPF.getText();
-            String cnpj = null;
+            String gerente = jtfGerente.getText().toUpperCase();
+            String cnpj = jtfCNPJ.getText();
             String endereco = jtfEndereco.getText().toUpperCase();
             String telefone = jftfTelefone.getText();
-            ClienteServicos clienteS = ServicosFactory.getClienteServicos();
-
-            Cliente c = new Cliente(idCliente, nomeCliente, cpf, cnpj, endereco, telefone);
+            EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
+            
+            Editora e = new Editora(idCliente, nomeCliente, cnpj, endereco, telefone, gerente);
             if (jbSalvar.getText().equals("Salvar")) {
-                clienteS.cadCliente(c);
-            } else {
-                clienteS.atualizarCliente(c);
+                editoraS.cadEditora(e);
+            }else{
+                editoraS.atualizarEditora(e);
                 jbLimpar.doClick();
             }
-
+            
             limparCampos();
             addRowToTable();
         }
@@ -395,49 +421,57 @@ public class jfCliente extends javax.swing.JFrame {
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
         // TODO add your handling code here:
         jbSalvar.setText("Confirmar");
-        jtfCPF.setEnabled(false);
+        jtfCNPJ.setEnabled(false);
         jbLimpar.setText("Cancelar");
         jbDeletar.setVisible(false);
-
+        
         //pegando dados da tabela e add em variaveis locais
         int linha;
-        linha = jtClientes.getSelectedRow();
-        String cpf = (String) jtClientes.getValueAt(linha, 0);
-        String nome = (String) jtClientes.getValueAt(linha, 1);
-        String telefone = (String) jtClientes.getValueAt(linha, 2);
-        String endereco = (String) jtClientes.getValueAt(linha, 3);
+        linha = jtEditoras.getSelectedRow();
+        String cnpj = (String) jtEditoras.getValueAt(linha, 0);
+        EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
+        Editora e = editoraS.buscarEditorabyCNPJ(cnpj);
         //carregar dados no form
-        jtfCPF.setText(cpf);
-        jtfNome.setText(nome);
-        jtfEndereco.setText(endereco);
-        jftfTelefone.setText(telefone);
-        jtfNome.requestFocus();
+        jtfCNPJ.setText(e.getCnpj());
+        jtfNome.setText(e.getNmEditora());
+        jtfEndereco.setText(e.getEndereco());
+        jftfTelefone.setText(e.getTelefone());
+        jtfGerente.setText(e.getGerente());
+        jtfNome.requestFocus();        
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDeletarActionPerformed
         // TODO add your handling code here:
         int linha;
-        String cpf;
-        linha = jtClientes.getSelectedRow();
-        cpf = (String) jtClientes.getValueAt(linha, 0);
-        ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+        String cnpj;
+        linha = jtEditoras.getSelectedRow();
+        cnpj = (String) jtEditoras.getValueAt(linha, 0);
+        EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
         Object[] resp = {"Sim", "Não"};
-        int resposta = JOptionPane.showOptionDialog(this,
-                "Deseja realmente deletar este CPF?", "Deletar",
-                JOptionPane.DEFAULT_OPTION,
+        int resposta = JOptionPane.showOptionDialog(this, 
+                "Deseja realmente deletar este CNPJ?", "Deletar", 
+                JOptionPane.DEFAULT_OPTION, 
                 JOptionPane.WARNING_MESSAGE,
                 null, resp, resp[0]);
         if (resposta == 0) {
-            clienteS.deletarCliente(cpf);
+            editoraS.deletarEditora(cnpj);
             addRowToTable();
-            JOptionPane.showMessageDialog(this,
-                    "Cliente deletado com sucesso!");
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "ok, entendo sua descisão!");
+            JOptionPane.showMessageDialog(this, 
+                    "Editora deletado com sucesso!");
+        }else{
+            JOptionPane.showMessageDialog(this, 
+                    "Ok, entendo sua descisão!");
         }
-        btnDefault();
+        jbDeletar.setVisible(false);
     }//GEN-LAST:event_jbDeletarActionPerformed
+
+    private void jtfGerenteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfGerenteKeyTyped
+        // TODO add your handling code here:
+        String nletras = "0123456789<>:?/~^}][{´`=+-_!|'\'@#$%¨&*()²³£¢¬§º°ª";
+        if (nletras.contains(evt.getKeyChar() + "")) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfGerenteKeyTyped
 
     /**
      * @param args the command line arguments
@@ -456,20 +490,21 @@ public class jfCliente extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(jfCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfEditora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(jfCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfEditora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(jfCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfEditora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(jfCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfEditora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new jfCliente().setVisible(true);
+                new jfEditora().setVisible(true);
             }
         });
     }
@@ -480,6 +515,7 @@ public class jfCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
@@ -490,9 +526,10 @@ public class jfCliente extends javax.swing.JFrame {
     private javax.swing.JButton jbLimpar;
     private javax.swing.JButton jbSalvar;
     private javax.swing.JFormattedTextField jftfTelefone;
-    private javax.swing.JTable jtClientes;
-    private javax.swing.JTextField jtfCPF;
+    private javax.swing.JTable jtEditoras;
+    private javax.swing.JTextField jtfCNPJ;
     private javax.swing.JTextField jtfEndereco;
+    private javax.swing.JTextField jtfGerente;
     private javax.swing.JTextField jtfNome;
     // End of variables declaration//GEN-END:variables
 }

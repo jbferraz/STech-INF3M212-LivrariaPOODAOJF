@@ -4,9 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/jbferraz/Documents/NetBeansProjects/INF3M212-LivrariaPOO-DAO-JF/src/inf3m212/livrariapoo/INF3M212LivrariaPOO.java</file>
-            <file>file:/C:/Users/jbferraz/Documents/NetBeansProjects/INF3M212-LivrariaPOO-DAO-JF/src/dao/ClienteDAO.java</file>
             <file>file:/C:/Users/jbferraz/Documents/NetBeansProjects/INF3M212-LivrariaPOO-DAO-JF/src/view/Menu.java</file>
-            <file>file:/C:/Users/jbferraz/Documents/NetBeansProjects/INF3M212-LivrariaPOO-DAO-JF/src/conexao/Conexao.java</file>
+            <file>file:/C:/Users/jbferraz/Documents/NetBeansProjects/INF3M212-LivrariaPOO-DAO-JF/src/view/jfEditora.java</file>
+            <file>file:/C:/Users/jbferraz/Documents/NetBeansProjects/INF3M212-LivrariaPOO-DAO-JF/src/model/Editora.java</file>
             <file>file:/C:/Users/jbferraz/Documents/NetBeansProjects/INF3M212-LivrariaPOO-DAO-JF/src/services/ClienteServicos.java</file>
             <file>file:/C:/Users/jbferraz/Documents/NetBeansProjects/INF3M212-LivrariaPOO-DAO-JF/src/view/jfCliente.java</file>
         </group>
